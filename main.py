@@ -6,20 +6,37 @@ import random
 
 #get words from file
 d = pandas.read_csv("data/french_words.csv")
+#make new words to learn file
+learning_data = d.to_csv("data/words_to_learn.csv", index=False)
+learning_words = pandas.read_csv("data/words_to_learn.csv")
+
+
 french_words = d.to_dict(orient="records")
-print(french_words[random.randint(0,len(french_words))]["French"])
+# print(french_words[random.randint(0,len(french_words))]["French"])
 # print(random.choice(french_words))
 
 
 
 #generate random words
-def gen_words():
-    global flip_timer
+def gen_words_green():
+    global flip_timer, learning_words
     window.after_cancel(flip_timer)
+    #delete the word from the words_to_learn file
+# Remove the word from the DataFrame and save it to the CSV
+    word = front_canvas.itemcget(card_word, "text")
+    index = learning_words[learning_words["French"] == word].index
+    learning_words = learning_words.drop(index)
+
+# Save the updated DataFrame back to the CSV file
+    learning_words.to_csv("data/words_to_learn.csv", index=False)
+    
+
     new_word = french_words[random.randint(0,len(french_words)-1)]["French"]
     front_canvas.itemconfig(canvas_img, image=card_front)
     front_canvas.itemconfig(card_language, text="French", fill="Black")
     front_canvas.itemconfig(card_word, text=new_word, fill="Black")
+
+
     flip_timer = window.after(3000, func=flip_cards)
 
 #flip the cards
@@ -52,7 +69,7 @@ def red_click():
     print("Red button clicked!")
 
 green_check = tkinter.PhotoImage(file="images/right.png")
-green_button = tkinter.Button(image=green_check, command=gen_words, highlightthickness=0)
+green_button = tkinter.Button(image=green_check, command=gen_words_green, highlightthickness=0)
 green_button.grid(row=1, column=1)
 
 red_check = tkinter.PhotoImage(file="images/wrong.png")
