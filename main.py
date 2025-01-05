@@ -14,9 +14,13 @@ print(french_words[random.randint(0,len(french_words))]["French"])
 
 #generate random words
 def gen_words():
+    global flip_timer
+    window.after_cancel(flip_timer)
     new_word = french_words[random.randint(0,len(french_words)-1)]["French"]
+    front_canvas.itemconfig(canvas_img, image=card_front)
     front_canvas.itemconfig(card_language, text="French", fill="Black")
     front_canvas.itemconfig(card_word, text=new_word, fill="Black")
+    flip_timer = window.after(3000, func=flip_cards)
 
 #flip the cards
 def flip_cards():
@@ -30,19 +34,14 @@ def flip_cards():
             if entry["French"] == starting_word:
                 englishw = entry["English"]
         front_canvas.itemconfig(card_word, text=englishw, fill="White")
-        current_img = card_back
-    else:
-        front_canvas.itemconfig(canvas_img, image=card_front)
-        gen_words()
-        current_img = card_front
 
-    window.after(3000, func=flip_cards)
 
     
 
 
 #set up webpage first
 window = tkinter.Tk()
+flip_timer = window.after(3000, func=flip_cards)
 window.title("French Flashcards")
 window.config(padx=50, pady=50, bg=BACKGROUND_COLOR)
 
@@ -57,7 +56,7 @@ green_button = tkinter.Button(image=green_check, command=gen_words, highlightthi
 green_button.grid(row=1, column=1)
 
 red_check = tkinter.PhotoImage(file="images/wrong.png")
-red_button = tkinter.Button(image=red_check, command=flip_cards, highlightthickness=0)
+red_button = tkinter.Button(image=red_check, highlightthickness=0)
 red_button.grid(row=1, column=0)
 
 card_front = tkinter.PhotoImage(file="images/card_front.png")
@@ -70,7 +69,6 @@ front_canvas.grid(row=0,column=0, columnspan=2)
 card_language = front_canvas.create_text(400, 150, text="Title", font=("Arial", 40, "italic"))
 card_word = front_canvas.create_text(400, 263, text="Word", font=("Arial", 60, "bold"))
 
-gen_words()
 
 
 window.mainloop()
