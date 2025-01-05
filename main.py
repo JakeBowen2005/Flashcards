@@ -66,8 +66,8 @@ current_img = card_front
 front_canvas = tkinter.Canvas(width=800, height=526, highlightthickness=0, bg=BACKGROUND_COLOR)
 canvas_img = front_canvas.create_image(400,268, image=card_front)
 front_canvas.grid(row=0,column=0, columnspan=2)
-card_language = front_canvas.create_text(400, 150, text="Title", font=("Arial", 40, "italic"))
-card_word = front_canvas.create_text(400, 263, text="Word", font=("Arial", 60, "bold"))
+card_language = front_canvas.create_text(400, 150, text="French", font=("Arial", 40, "italic"))
+card_word = front_canvas.create_text(400, 263, text=french_words[random.randint(0,len(french_words)-1)]["French"], font=("Arial", 60, "bold"))
 
 
 
